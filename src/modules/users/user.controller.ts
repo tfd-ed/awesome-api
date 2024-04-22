@@ -8,9 +8,13 @@ import {
   Res,
   HttpCode,
   Body,
+  Delete,
 } from '@nestjs/common';
+
 import { UserService } from './user.service';
+
 import { Request, Response } from 'express';
+import { UserDTO } from './dto/user.dto';
 
 @Controller('users')
 export class UserController {
@@ -23,17 +27,24 @@ export class UserController {
 
   @HttpCode(201)
   @Post()
-  createUser(@Res() res: Response, @Body() body) {
-    const result = this.userService.createUser();
+  createUser(@Body() body: UserDTO, @Res() res: Response) {
+    const result = this.userService.createUser(body);
     return res.json(result);
   }
 
-  @HttpCode(201)
-  @Post('devices')
-  createDevice(@Res() res: Response) {
-    const result = this.userService.createDevice();
+  @Delete(':id')
+  deleteUser(@Param('id') id: number, @Res() res: Response) {
+    const result = this.userService.deleteUser(id);
     return res.json(result);
   }
+
+  // @HttpCode(201)
+  // @Post('devices')
+  // createDevice(@Res() res: Response) {
+  //   const result = this.userService.createDevice();
+
+  //   return res.json(result);
+  // }
 
   @Get(':userId')
   getAllUserDevices(@Req() req: Request) {

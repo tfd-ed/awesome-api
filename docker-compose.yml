@@ -1,0 +1,26 @@
+version: "2"
+services:
+  server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - "3000:5000"
+    volumes:
+      - ./src:/app/src
+  database:
+    image: postgres:16-alpine
+    container_name: database
+    environment:
+      - POSTGRES_PASSWORD=tfd-pass
+      - POSTGRES_USER=tfd
+      - POSTGRES_DB=tfd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresdata:/var/lib/postgresql
+
+volumes:
+  postgresdata:
+

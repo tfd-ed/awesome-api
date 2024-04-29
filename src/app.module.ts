@@ -4,13 +4,24 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/users/user.module';
 import { SimpleMiddleware } from './middlewares/simple.middlewares';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { typeormConfig } from './config';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: typeormConfig,
+    }),
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

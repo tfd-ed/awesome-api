@@ -1,16 +1,17 @@
-import { UserDTO } from '../dto/user.dto';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+@Entity({ name: 'users' })
 export class UserEntity {
-  constructor(dto: UserDTO) {
-    this.id = dto.id;
-    this.username = dto.username;
-    this.fullname = dto.fullname;
-    this.age = dto.age;
-    this.grade = dto.grade;
-  }
+  @PrimaryGeneratedColumn('uuid')
   id: number;
+  @Column()
   username: string;
+  @Column()
   fullname: string;
+  @Column({ type: 'int' })
   age: number;
+  @Column({ nullable: true })
   grade: string;
+  @Column({ nullable: true })
+  address: string;
 }

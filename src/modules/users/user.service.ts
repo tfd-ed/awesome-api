@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserDTO } from './dto/user.dto';
 import { UserEntity } from './entity/user.entity';
 
 @Injectable()
@@ -21,11 +20,11 @@ export class UserService {
     return user;
   }
   // Create
-  createUser(userdto: UserDTO): UserEntity {
-    const user = new UserEntity(userdto);
-    this.allUser.push(user);
-    return user;
-  }
+  // createUser(userdto: UserDTO): UserEntity {
+  //   const user = new UserEntity(userdto);
+  //   this.allUser.push(user);
+  //   return user;
+  // }
   // Delete
   deleteUser(id: number): UserEntity {
     const user = this.allUser.find((item) => {

@@ -28,8 +28,8 @@ export class UserController {
   @HttpCode(201)
   @Post()
   createUser(@Body() body: UserDTO, @Res() res: Response) {
-    const result = this.userService.createUser(body);
-    return res.json(result);
+    // const result = this.userService.createUser(body);
+    return res.json('Created');
   }
 
   @Delete(':id')

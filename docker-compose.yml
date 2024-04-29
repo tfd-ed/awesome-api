@@ -9,6 +9,7 @@ services:
       - "3000:5000"
     volumes:
       - ./src:/app/src
+      - .env:/app/.env
   database:
     image: postgres:16-alpine
     container_name: database

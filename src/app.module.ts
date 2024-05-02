@@ -11,6 +11,7 @@ import { UserModule } from './modules/users/user.module';
 import { SimpleMiddleware } from './middlewares/simple.middlewares';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeormConfig } from './config';
+import { BookModule } from './modules/books/book.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { typeormConfig } from './config';
       useFactory: typeormConfig,
     }),
     UserModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],

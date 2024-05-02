@@ -3,63 +3,46 @@ import {
   Get,
   Post,
   Param,
-  Query,
-  Req,
-  Res,
   HttpCode,
   Body,
   Delete,
+  HttpException,
+  HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
 
-import { Request, Response } from 'express';
 import { UserDTO } from './dto/user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
   getAllUser() {
+    // In case no permission
+    // return this.userService.getUsers();
     return this.userService.getUsers();
   }
 
   @HttpCode(201)
   @Post()
-  createUser(@Body() body: UserDTO, @Res() res: Response) {
-    // const result = this.userService.createUser(body);
-    return res.json('Created');
+  createUser(@Body() body: UserDTO) {
+    const result = this.userService.createUser(body);
+    return result;
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: number, @Res() res: Response) {
+  deleteUser(@Param('id') id: string) {
     const result = this.userService.deleteUser(id);
-    return res.json(result);
+    return result;
   }
-
-  // @HttpCode(201)
-  // @Post('devices')
-  // createDevice(@Res() res: Response) {
-  //   const result = this.userService.createDevice();
-
-  //   return res.json(result);
-  // }
 
   @Get(':userId')
-  getAllUserDevices(@Req() req: Request) {
-    console.log(req.query);
-    return this.userService.getUsers();
-  }
-
-  @Get('/devices/:deviceId')
-  getDevices(
-    @Param('deviceId') id: string,
-    @Query('page') page,
-    @Query('limit') limit,
-  ) {
-    console.log(page);
-    console.log(limit);
-    return this.userService.getUsers();
+  getUserById(@Param('userId') id: string) {
+    return this.userService.getUser(id);
   }
 }

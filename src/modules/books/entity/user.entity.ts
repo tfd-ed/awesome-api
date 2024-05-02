@@ -1,16 +1,17 @@
 import { CommonEntity } from 'src/modules/common/entity/common';
 import { Entity, Column } from 'typeorm';
 
-@Entity({ name: 'users' })
-export class UserEntity extends CommonEntity {
+@Entity({ name: 'books' })
+export class BookEntity extends CommonEntity {
   @Column()
-  username: string;
+  title: string;
+
   @Column()
-  fullname: string;
-  @Column({ type: 'int' })
-  age: number;
+  dateOfPublished: string;
+
   @Column({ nullable: true })
-  grade: string;
+  author: string;
+
   @Column({ nullable: true })
-  address: string;
+  category: string;
 }

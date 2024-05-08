@@ -1,27 +1,45 @@
 version: "2"
 services:
-  server:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    container_name: server
-    ports:
-      - "3000:5000"
+  nest:
+    build: .
+    container_name: tfd-nest
+    depends_on:
+      - db
+      - redis
     volumes:
       - ./src:/app/src
+      - ./test:/app/test
       - .env:/app/.env
-  database:
-    image: postgres:16-alpine
-    container_name: database
+      - ./upload:/app/upload
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: tfd-nest-nginx
+    depends_on:
+      - nest
     environment:
-      - POSTGRES_PASSWORD=tfd-pass
-      - POSTGRES_USER=tfd
-      - POSTGRES_DB=tfd
+      - NGINX_SERVER_NAME=localhost
+      - NEST_HOST=nest
+      - NEST_PORT=3000
+      - NGINX_MAX_BODY=100M
     ports:
-      - "5432:5432"
+      - 80:80
+  db:
+    image: postgres:12
+    container_name: tfd-nest-db
+    environment:
+      POSTGRES_DB: nest
+      POSTGRES_USER: nest
+      POSTGRES_PASSWORD: nest
+    ports:
+      - 5432:5432
     volumes:
       - postgresdata:/var/lib/postgresql
-
+  redis:
+    image: redis:5
+    container_name: tfd-redis
+    ports:
+      - 6379:6379
 volumes:
   postgresdata:
-

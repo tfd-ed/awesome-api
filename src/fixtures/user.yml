@@ -14,4 +14,12 @@ items:
     roles:
       - DEFAULT
     email: '{{internet.email}}'
+  user{3..100}:
+    username: '{{internet.userName}}'
+    name: '{{name.firstName}} {{name.lastName}}'
+    password: user123
+    roles:
+      - DEFAULT
+    email: '{{internet.email}}'
+
 

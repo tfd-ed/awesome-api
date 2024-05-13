@@ -18,7 +18,7 @@ import { Public } from '../common/decorator/public.decorator';
 import { Roles } from '../common/decorator/roles.decorator';
 import { AppRoles } from '../common/enum/roles.enum';
 
-@Controller('api/v1/user')
+@Controller('api/v1/users')
 @ApiTags('User')
 export class UserController {
   /**

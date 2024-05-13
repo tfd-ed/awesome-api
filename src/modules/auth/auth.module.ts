@@ -6,11 +6,13 @@ import { UserModule } from '../user';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     UserModule,
     ConfigModule,
+    HttpModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

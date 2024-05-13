@@ -10,7 +10,7 @@ import { Public } from '../common/decorator/public.decorator';
     type: BookEntity,
   },
 })
-@Controller('books')
+@Controller('api/v1/books')
 @ApiTags('Books')
 @Public()
 export class BookController implements CrudController<BookEntity> {

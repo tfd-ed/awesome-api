@@ -19,13 +19,16 @@ import { UUIDType } from '../common/validator/FindOneUUID.validator';
 import { ResetPayload } from '../auth/payloads/reset.payload';
 import { UpdatePayload } from './payloads/update.payload';
 import { RegisterPayload } from '../auth/payloads/register.payload';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends TypeOrmCrudService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) {
+    super(userRepository);
+  }
 
   async get(@Param() id: UUIDType) {
     return this.userRepository.findOne(id);
@@ -49,10 +52,10 @@ export class UsersService {
     }
   }
 
-  async getAll(options: IPaginationOptions): Promise<Pagination<UserEntity>> {
+  async getAll(): Promise<UserEntity[]> {
     const queryBuilder = await this.userRepository.createQueryBuilder('a');
     queryBuilder.orderBy('a.updatedDate', 'DESC');
-    return paginate<UserEntity>(queryBuilder, options);
+    return queryBuilder.execute();
   }
 
   async changPassword(payload: ResetPayload): Promise<any> {

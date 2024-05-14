@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { PasswordTransformer } from '../password.transformer';
 import { AppRoles } from '../../common/enum/roles.enum';
+import { UsersType } from 'src/modules/common/enum/users-type.enum';
 
 @Entity({
   name: 'users',
@@ -71,6 +72,16 @@ export class UserEntity {
     transformer: new PasswordTransformer(),
   })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UsersType,
+    default: UsersType.PASSWORD,
+  })
+  userType: string;
+
+  @Column({ type: 'text', nullable: true })
+  picture: string;
 
   /**
    * Omit password from query selection

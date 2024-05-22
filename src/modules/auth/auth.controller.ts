@@ -1,4 +1,12 @@
-import { Controller, Body, Post, Get, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  Get,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from '../user';
 import { Public } from '../common/decorator/public.decorator';
@@ -7,7 +15,8 @@ import { LoginPayload } from './payloads/login.payload';
 import { ResetPayload } from './payloads/reset.payload';
 import { RegisterPayload } from './payloads/register.payload';
 import { ConfigService } from '@nestjs/config';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { GoogleOAuthGuard } from './google-oauth-guard';
 
 @Controller('api/v1/auth')
 @ApiTags('Authentication')
@@ -48,11 +57,27 @@ export class AuthController {
     response.redirect(uri);
   }
 
+  @UseGuards(GoogleOAuthGuard)
   @Public()
   @Get('google/callback')
-  async googleCallback(@Req() request: Request): Promise<any> {
-    const { code } = request.query;
-    return this.authService.registerGoogleUser(code);
+  async googleCallback(@Req() request): Promise<any> {
+    // Request
+    // request.uesr
+    /**
+     *     const user = {
+      provider: 'google',
+      id: id,
+      email: emails[0].value,
+      name: `${name.givenName} ${name.familyName}`,
+      firstname: name.givenName,
+      lastname: name.familyName,
+      picture: photos[0].value,
+    };
+     * 
+     */
+    // const { code } = request.query;
+    // return this.authService.registerGoogleUser(code);
+    return request.user;
   }
 
   /**

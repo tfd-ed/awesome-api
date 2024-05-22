@@ -20,6 +20,8 @@ import { ResetPayload } from '../auth/payloads/reset.payload';
 import { UpdatePayload } from './payloads/update.payload';
 import { RegisterPayload } from '../auth/payloads/register.payload';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+// import { WebSocketServer } from '@nestjs/websockets';
+// import { Server } from 'socket.io';
 
 @Injectable()
 export class UsersService extends TypeOrmCrudService<UserEntity> {
@@ -29,6 +31,7 @@ export class UsersService extends TypeOrmCrudService<UserEntity> {
   ) {
     super(userRepository);
   }
+  // @WebSocketServer() io: Server;
 
   async get(@Param() id: UUIDType) {
     return this.userRepository.findOne(id);
@@ -93,4 +96,8 @@ export class UsersService extends TypeOrmCrudService<UserEntity> {
       );
     }
   }
+
+  // sendUserToClient(user: UserEntity) {
+  //   this.io.emit('user-updated', user);
+  // }
 }

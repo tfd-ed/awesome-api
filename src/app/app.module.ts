@@ -13,6 +13,7 @@ import { UserModule } from '../modules/user';
 import { LoggingInterceptor } from '../modules/common/interceptor/logging.interceptor';
 import { RolesGuard } from '../modules/common/guard/roles.guard';
 import { BookModule } from 'src/modules/books/book.module';
+import { ChatModule } from 'src/modules/chat/chat.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -87,6 +88,7 @@ import { BookModule } from 'src/modules/books/book.module';
     UserModule,
     BookModule,
     CommonModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

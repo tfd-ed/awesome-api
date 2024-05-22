@@ -5,7 +5,6 @@ import { UserEntity, UsersService } from '../user';
 import { LoginPayload } from './payloads/login.payload';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from 'axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersType } from '../common/enum/users-type.enum';
@@ -63,20 +62,7 @@ export class AuthService {
         headers: { Authorization: `Bearer ${access_token}` },
       },
     );
-    // return response.data;
     // Check if user exist
-    const users = await this.userService.getAll();
-    // let exitedUser;
-    // if (
-    //   users.some((user) => {
-    //     if (user.email == response.data.email) {
-    //       exitedUser = user;
-    //       return true;
-    //     }
-    //   })
-    // ) {
-    //   return this.createToken(exitedUser);
-    // }
     const user = await this.userRepository.findOne({
       where: { email: response.data.email },
     });

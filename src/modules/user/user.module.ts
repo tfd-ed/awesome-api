@@ -4,6 +4,7 @@ import { UserEntity } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { PassportModule } from '@nestjs/passport';
 import { UsersService } from './user.service';
+import { UserGateWay } from './user.gateway';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { UsersService } from './user.service';
   ],
   exports: [UsersService],
   controllers: [UserController],
-  providers: [UsersService],
+  providers: [UsersService, UserGateWay],
 })
 export class UserModule {}

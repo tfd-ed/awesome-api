@@ -1,22 +1,39 @@
 # vim: ft=nginx
+events {
+	worker_connections 1024;
+}
+http {
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+    }
 
-server {
-	listen 80;
-	server_name ${NGINX_SERVER_NAME};
-	root /app/public;
-	client_max_body_size ${NGINX_MAX_BODY};
+    upstream backend {
+        server ${NEST_HOST_1}:${NEST_PORT};
+		server ${NEST_HOST_2}:${NEST_PORT};
+		server ${NEST_HOST_3}:${NEST_PORT};
+		server ${NEST_HOST_4}:${NEST_PORT};
+        server ${NEST_HOST_5}:${NEST_PORT};
+        server ${NEST_HOST_6}:${NEST_PORT};
+        server ${NEST_HOST_7}:${NEST_PORT};
+        server ${NEST_HOST_8}:${NEST_PORT};
+        server ${NEST_HOST_9}:${NEST_PORT};
+        server ${NEST_HOST_10}:${NEST_PORT};
+    }
 
-	location / {
-		# try_files $uri =404;
-		proxy_pass  http://${NEST_HOST}:${NEST_PORT};
-		proxy_set_header Host $host;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header X-Forwarded-Host $server_name;
-		proxy_set_header X-Forwarded-Proto https;
-		proxy_http_version 1.1;
-    	proxy_set_header Upgrade $http_upgrade;
-    	proxy_set_header Connection "upgrade";
-	}
+    server {
+        listen 80;
+		server_name ${NGINX_SERVER_NAME};
+		root /app/public;
+		client_max_body_size ${NGINX_MAX_BODY};
+
+        location / {
+            proxy_pass http://backend;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+            proxy_set_header Host $host;
+        }
+    }
 }
 

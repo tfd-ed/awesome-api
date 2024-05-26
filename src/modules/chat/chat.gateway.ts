@@ -15,8 +15,7 @@ import { TimeoutInterceptor } from '../common/interceptor/timeout.interceptor';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateWay
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private logger = new Logger(ChatGateWay.name);
   @WebSocketServer() io: Server;
 

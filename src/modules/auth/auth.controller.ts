@@ -6,6 +6,7 @@ import {
   Req,
   Res,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from '../user';
@@ -32,6 +33,8 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
+  private logger = new Logger(AuthController.name);
+
   /**
    * Login User
    * @param payload username, password
@@ -43,6 +46,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(@Body() payload: LoginPayload): Promise<any> {
+    this.logger.log('Hello from instance: ...');
     const user = await this.authService.validateUser(payload);
     return await this.authService.createToken(user);
   }

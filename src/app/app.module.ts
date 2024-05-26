@@ -62,15 +62,6 @@ import { ChatModule } from 'src/modules/chat/chat.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        if (process.env.NODE_ENV === 'development') {
-          return {
-            ttl: configService.get<string>('CACHE_TTL'), // seconds
-            max: configService.get<string>('CACHE_MAX'), // maximum number of items in cache
-            store: redisStore,
-            host: configService.get<string>('CACHE_HOST'),
-            port: configService.get<string>('CACHE_PORT'),
-          };
-        }
         if (process.env.NODE_ENV === 'production') {
           /**
            * Use redis url in production instead
@@ -82,6 +73,13 @@ import { ChatModule } from 'src/modules/chat/chat.module';
             url: configService.get<string>('REDIS_URL'),
           };
         }
+        return {
+          ttl: configService.get<string>('CACHE_TTL'), // seconds
+          max: configService.get<string>('CACHE_MAX'), // maximum number of items in cache
+          store: redisStore,
+          host: configService.get<string>('CACHE_HOST'),
+          port: configService.get<string>('CACHE_PORT'),
+        };
       },
     }),
     AuthModule,
@@ -111,4 +109,4 @@ import { ChatModule } from 'src/modules/chat/chat.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

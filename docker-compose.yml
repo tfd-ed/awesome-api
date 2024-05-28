@@ -11,7 +11,7 @@ services:
       - .env:/app/.env
       - ./upload:/app/upload
     restart: unless-stopped
-    scale: 10
+    # scale: 3
   nginx:
     build:
       context: .
@@ -22,15 +22,8 @@ services:
     environment:
       - NGINX_SERVER_NAME=localhost
       - NEST_HOST_1=awesome-api-nest-1
-      - NEST_HOST_2=awesome-api-nest-2
-      - NEST_HOST_3=awesome-api-nest-3
-      - NEST_HOST_4=awesome-api-nest-4
-      - NEST_HOST_5=awesome-api-nest-5
-      - NEST_HOST_6=awesome-api-nest-6
-      - NEST_HOST_7=awesome-api-nest-7
-      - NEST_HOST_8=awesome-api-nest-8
-      - NEST_HOST_9=awesome-api-nest-9
-      - NEST_HOST_10=awesome-api-nest-10
+      # - NEST_HOST_2=awesome-api-nest-2
+      # - NEST_HOST_3=awesome-api-nest-3
       - NEST_PORT=3000
       - NGINX_MAX_BODY=100M
     ports:
@@ -51,5 +44,13 @@ services:
     container_name: tfd-redis
     ports:
       - 6379:6379
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:tfd-redis:6379
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
 volumes:
   postgresdata:

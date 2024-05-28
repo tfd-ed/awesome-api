@@ -1,4 +1,4 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +14,8 @@ import { LoggingInterceptor } from '../modules/common/interceptor/logging.interc
 import { RolesGuard } from '../modules/common/guard/roles.guard';
 import { BookModule } from 'src/modules/books/book.module';
 import { ChatModule } from 'src/modules/chat/chat.module';
+import { NoCacheInterceptor } from 'src/modules/common/interceptor/no-cache.interceptor';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,17 +64,6 @@ import { ChatModule } from 'src/modules/chat/chat.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        if (process.env.NODE_ENV === 'production') {
-          /**
-           * Use redis url in production instead
-           */
-          return {
-            ttl: configService.get<string>('CACHE_TTL'), // seconds
-            max: configService.get<string>('CACHE_MAX'), // maximum number of items in cache
-            store: redisStore,
-            url: configService.get<string>('REDIS_URL'),
-          };
-        }
         return {
           ttl: configService.get<string>('CACHE_TTL'), // seconds
           max: configService.get<string>('CACHE_MAX'), // maximum number of items in cache
@@ -82,6 +73,7 @@ import { ChatModule } from 'src/modules/chat/chat.module';
         };
       },
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UserModule,
     BookModule,
@@ -102,6 +94,10 @@ import { ChatModule } from 'src/modules/chat/chat.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: TimeoutInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: NoCacheInterceptor,
     },
     {
       provide: APP_INTERCEPTOR,

@@ -10,15 +10,8 @@ http {
 
     upstream backend {
         server ${NEST_HOST_1}:${NEST_PORT};
-		server ${NEST_HOST_2}:${NEST_PORT};
-		server ${NEST_HOST_3}:${NEST_PORT};
-		server ${NEST_HOST_4}:${NEST_PORT};
-        server ${NEST_HOST_5}:${NEST_PORT};
-        server ${NEST_HOST_6}:${NEST_PORT};
-        server ${NEST_HOST_7}:${NEST_PORT};
-        server ${NEST_HOST_8}:${NEST_PORT};
-        server ${NEST_HOST_9}:${NEST_PORT};
-        server ${NEST_HOST_10}:${NEST_PORT};
+		# server ${NEST_HOST_2}:${NEST_PORT};
+		# server ${NEST_HOST_3}:${NEST_PORT};
     }
 
     server {

@@ -18,6 +18,7 @@ import { RegisterPayload } from './payloads/register.payload';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { GoogleOAuthGuard } from './google-oauth-guard';
+import { NoCache } from '../common/decorator/no-cache.decorator';
 
 @Controller('api/v1/auth')
 @ApiTags('Authentication')
@@ -31,7 +32,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   private logger = new Logger(AuthController.name);
 
@@ -51,6 +52,7 @@ export class AuthController {
     return await this.authService.createToken(user);
   }
 
+  @NoCache()
   @Public()
   @Get('login-google')
   loginGoogle(@Res() response: Response): any {
@@ -61,6 +63,7 @@ export class AuthController {
     response.redirect(uri);
   }
 
+  @NoCache()
   @UseGuards(GoogleOAuthGuard)
   @Public()
   @Get('google/callback')
@@ -115,6 +118,7 @@ export class AuthController {
    * Get request's user info
    * @param request express request
    */
+  @NoCache()
   @ApiBearerAuth()
   @Get('me')
   @ApiResponse({ status: 200, description: 'Successful Response' })

@@ -12,7 +12,7 @@ export class UserNotification {
     ) { }
     private readonly logger = new Logger(UserNotification.name);
 
-    @Interval(10000)
+    // @Interval(10000)
     async informUser() {
         const users = await this.userRepository.find({ select: ['email', 'id'] });
         this.logger.log('Printing');

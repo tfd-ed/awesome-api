@@ -5,6 +5,7 @@ import { UserController } from './user.controller';
 import { PassportModule } from '@nestjs/passport';
 import { UsersService } from './user.service';
 import { UserNotification } from './user.notification';
+import { UserEvent } from './user.event';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { UserNotification } from './user.notification';
   ],
   exports: [UsersService],
   controllers: [UserController],
-  providers: [UsersService, UserNotification],
+  providers: [UsersService, UserNotification, UserEvent],
 })
 export class UserModule { }

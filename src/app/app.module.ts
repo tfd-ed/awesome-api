@@ -16,6 +16,7 @@ import { BookModule } from 'src/modules/books/book.module';
 import { ChatModule } from 'src/modules/chat/chat.module';
 import { NoCacheInterceptor } from 'src/modules/common/interceptor/no-cache.interceptor';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -74,6 +75,7 @@ import { ScheduleModule } from '@nestjs/schedule';
       },
     }),
     ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
     AuthModule,
     UserModule,
     BookModule,

@@ -17,6 +17,8 @@ import { ChatModule } from 'src/modules/chat/chat.module';
 import { NoCacheInterceptor } from 'src/modules/common/interceptor/no-cache.interceptor';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -74,6 +76,18 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         };
       },
     }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: 60,
+        limit: 10,
+        storage: new ThrottlerStorageRedisService({
+          host: config.get<string>('CACHE_HOST'),
+          port: config.get<number>('CACHE_PORT'),
+        }),
+      }),
+    }),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
     AuthModule,
@@ -88,6 +102,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     {
       provide: APP_GUARD,
@@ -107,4 +125,4 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

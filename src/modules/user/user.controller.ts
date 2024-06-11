@@ -30,7 +30,7 @@ export class UserController implements CrudController<UserEntity> {
   constructor(
     public service: UsersService,
     private eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   get base(): CrudController<UserEntity> {
     return this;

@@ -11,7 +11,7 @@ services:
       - .env:/app/.env
       - ./upload:/app/upload
     restart: unless-stopped
-    # scale: 3
+    scale: 3
   nginx:
     build:
       context: .
@@ -22,8 +22,8 @@ services:
     environment:
       - NGINX_SERVER_NAME=localhost
       - NEST_HOST_1=awesome-api-nest-1
-      # - NEST_HOST_2=awesome-api-nest-2
-      # - NEST_HOST_3=awesome-api-nest-3
+      - NEST_HOST_2=awesome-api-nest-2
+      - NEST_HOST_3=awesome-api-nest-3
       - NEST_PORT=3000
       - NGINX_MAX_BODY=100M
     ports:

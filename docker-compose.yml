@@ -28,6 +28,10 @@ services:
       - NGINX_MAX_BODY=100M
     ports:
       - 80:80
+      - 443:443
+    volumes:
+      - ./certs/localhost.pem:/etc/nginx/ssl/localhost.pem
+      - ./certs/localhost-key.pem:/etc/nginx/ssl/localhost-key.pem
   db:
     image: postgres:12
     container_name: tfd-nest-db

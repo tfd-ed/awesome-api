@@ -2,12 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { setupSwagger } from './swagger';
 import { useContainer } from 'class-validator';
 import { ValidationPipe } from '@nestjs/common';
-
 import { CrudConfigService } from '@nestjsx/crud';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const helmet = require('helmet');
 
 CrudConfigService.load({
   query: {
     limit: 10,
+    cache: 2000,
+    alwaysPaginate: true,
   },
   params: {
     id: {
@@ -21,9 +24,18 @@ CrudConfigService.load({
 // Eslint
 import { AppModule } from './app/app.module';
 import { RedisIoAdapter } from './modules/common/adapter/ws.adapter';
+// import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
+  // const httpsOptions = {
+  //   key: fs.readFileSync(path.join(__dirname, '../localhost-key.pem')),
+  //   cert: fs.readFileSync(path.join(__dirname, '../localhost.pem')),
+  // };
+
+  // const app = await NestFactory.create(AppModule, { httpsOptions });
+
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
   const redisIoAdapter = new RedisIoAdapter(app);
   await redisIoAdapter.connectToRedis();
   setupSwagger(app);

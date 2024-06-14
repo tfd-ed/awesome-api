@@ -1,4 +1,10 @@
-import { CacheTTL, Controller } from '@nestjs/common';
+import {
+  CacheTTL,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { BookService } from './book.service';
 import { BookEntity } from './entity/book.entity';
 import {
@@ -8,9 +14,11 @@ import {
   Override,
   ParsedRequest,
 } from '@nestjsx/crud';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Public } from '../common/decorator/public.decorator';
-
+import { Throttle } from '@nestjs/throttler';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 @Crud({
   model: {
     type: BookEntity,
@@ -27,9 +35,34 @@ export class BookController implements CrudController<BookEntity> {
   }
 
   @CacheTTL(60)
+  @Throttle(30, 10 * 60)
   @Public()
   @Override('getManyBase')
   getMany(@ParsedRequest() req: CrudRequest) {
     return this.base.getManyBase(req);
+  }
+
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: {
+        destination: './upload',
+      },
+    }),
+  )
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 }

@@ -1,4 +1,9 @@
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
+import {
+  CacheInterceptor,
+  CacheModule,
+  CacheModuleOptions,
+  Module,
+} from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -68,20 +73,20 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          ttl: configService.get<string>('CACHE_TTL'), // seconds
-          max: configService.get<string>('CACHE_MAX'), // maximum number of items in cache
+          ttl: configService.get<number>('CACHE_TTL'), // seconds
+          max: configService.get<number>('CACHE_MAX'), // maximum number of items in cache
           store: redisStore,
           host: configService.get<string>('CACHE_HOST'),
-          port: configService.get<string>('CACHE_PORT'),
-        };
+          port: configService.get<number>('CACHE_PORT'),
+        } as CacheModuleOptions;
       },
     }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        ttl: 60,
-        limit: 10,
+        ttl: config.get<number>('RATE_LIMIT_TTL'),
+        limit: config.get<number>('RATE_LIMIT_ITEMS'),
         storage: new ThrottlerStorageRedisService({
           host: config.get<string>('CACHE_HOST'),
           port: config.get<number>('CACHE_PORT'),
@@ -125,4 +130,4 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

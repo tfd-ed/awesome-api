@@ -12,6 +12,8 @@ import { Server } from 'socket.io';
 import { JWTWSGuard } from '../common/guard/jwt-ws-guard';
 import { LoggingInterceptor } from '../common/interceptor/logging.interceptor';
 import { TimeoutInterceptor } from '../common/interceptor/timeout.interceptor';
+import { WsThrottlerGuard } from '../common/guard/ws-throttler.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateWay
@@ -30,9 +32,10 @@ export class ChatGateWay
     this.logger.log(`Client Id: ${client.id} dsiconnected!`);
   }
 
-  @UseInterceptors(new TimeoutInterceptor())
-  @UseInterceptors(new LoggingInterceptor())
-  @UseGuards(JWTWSGuard)
+  // @UseInterceptors(new TimeoutInterceptor())
+  // @UseInterceptors(new LoggingInterceptor())
+  @Throttle(5, 60)
+  @UseGuards(JWTWSGuard, WsThrottlerGuard)
   @SubscribeMessage('send-message')
   handleMessage(client: any, data: any) {
     // Server responsibilty

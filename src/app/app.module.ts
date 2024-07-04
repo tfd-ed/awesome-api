@@ -24,6 +24,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
+import { PurchaseMoule } from 'src/modules/purchase/purchase.module';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,8 +35,9 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        // console.log(configService.get<boolean>('DB_SYNC'));
         if (process.env.NODE_ENV === 'development') {
-          return {
+          const config = {
             type: configService.get<string>('DB_TYPE'),
             host: configService.get<string>('DB_HOST'),
             port: configService.get<string>('DB_PORT'),
@@ -42,10 +45,14 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_DATABASE'),
             entities: [__dirname + './../**/**.entity{.ts,.js}'],
-            subscribers: [__dirname + './../**/**/*.subscriber.{ts,js}'],
-            synchronize: configService.get<string>('DB_SYNC'),
+            subscribers: [__dirname + './../**/**/*.subscriber.{ts}'],
+            migrations: [__dirname + './../migrations/{*.ts,.js}'],
+            synchronize: configService.get<string>('DB_SYNC') !== 'false',
+            logNotifications: true,
+            migrationsRun: true,
             retryAttempts: 20,
-          } as TypeOrmModuleAsyncOptions;
+          };
+          return config as TypeOrmModuleAsyncOptions;
         }
         if (process.env.NODE_ENV === 'production') {
           /**
@@ -54,9 +61,10 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
           return {
             type: configService.get<string>('DB_TYPE'),
             url: configService.get<string>('DATABASE_URL'),
-            entities: [__dirname + './../**/**.entity{.ts,.js}'],
-            subscribers: [__dirname + './../**/**/*.subscriber.{ts,js}'],
-            synchronize: configService.get('DB_SYNC'),
+            entities: [__dirname + './../**/**.entity{.js}'],
+            subscribers: [__dirname + './../**/**/*.subscriber.{js}'],
+            migration: [join(__dirname, './../migrations/{*.js}')],
+            synchronize: false,
             ssl: true,
             retryAttempts: 20,
             extra: {
@@ -98,6 +106,7 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
     AuthModule,
     UserModule,
     BookModule,
+    PurchaseMoule,
     CommonModule,
     ChatModule,
   ],
@@ -130,4 +139,4 @@ import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

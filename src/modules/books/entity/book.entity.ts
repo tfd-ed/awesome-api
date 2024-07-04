@@ -1,5 +1,6 @@
-import { CommonEntity } from 'src/modules/common/entity/common';
-import { Entity, Column } from 'typeorm';
+import { UserEntity } from '../../user/entity/user.entity';
+import { CommonEntity } from '../../common/entity/common';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity({ name: 'books' })
 export class BookEntity extends CommonEntity {
@@ -9,9 +10,16 @@ export class BookEntity extends CommonEntity {
   @Column()
   dateOfPublished: string;
 
-  @Column({ nullable: true })
-  author: string;
+  @ManyToOne(() => UserEntity, (user) => user.books)
+  @JoinColumn({ name: 'userId' })
+  user: string;
 
   @Column({ nullable: true })
   category: string;
+
+  @Column({ type: 'text' })
+  isbn: string;
+
+  @Column({ type: 'text' })
+  doi: string;
 }

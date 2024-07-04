@@ -1,0 +1,5 @@
+entity: DiscountEntity
+items:
+  discount{1..100}:
+    price: '{{commerce.price}}'
+    onPurchase: '@purchase($current)'

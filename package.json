@@ -19,13 +19,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ts-typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
-    "fixture:generate": "fixtures ./src/fixtures --config ./ormconfig.js --sync --require=ts-node/register --require=tsconfig-paths/register",
+    "fixture:generate": "fixtures ./src/fixtures --config ./ormconfig.js --require=ts-node/register --require=tsconfig-paths/register",
     "migration:create": "yarn ts-typeorm migration:create -d src/migrations",
     "migration:generate": "yarn ts-typeorm migration:generate -d src/migrations",
     "migration:run": "yarn ts-typeorm migration:run",
     "migration:revert": "yarn ts-typeorm migration:revert"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.608.0",
     "@nest-auth/redis": "^0.3.0",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^8.4.7",
@@ -39,7 +40,7 @@
     "@nestjs/schedule": "1.0.2",
     "@nestjs/swagger": "^5.0.9",
     "@nestjs/throttler": "^2.0.1",
-    "@nestjs/typeorm": "^8.0.2",
+    "@nestjs/typeorm": "^8.0.4",
     "@nestjs/websockets": "^8.0.0",
     "@nestjsx/crud": "^5.0.0-alpha.3",
     "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
@@ -67,7 +68,7 @@
     "rxjs": "^7.2.0",
     "socket.io": "^4.7.5",
     "swagger-ui-express": "^4.1.6",
-    "typeorm": "^0.2.36"
+    "typeorm": "^0.2.38"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -93,7 +94,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typeorm-fixtures-cli": "^1.9.1",
+    "typeorm-fixtures-cli": "^1.6.0",
     "typescript": "^4.3.5"
   },
   "jest": {

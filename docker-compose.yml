@@ -33,7 +33,7 @@ services:
       - ./certs/localhost.pem:/etc/nginx/ssl/localhost.pem
       - ./certs/localhost-key.pem:/etc/nginx/ssl/localhost-key.pem
   db:
-    image: postgres:12
+    image: postgres:14.10
     container_name: tfd-nest-db
     environment:
       POSTGRES_DB: nest

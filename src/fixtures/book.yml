@@ -3,5 +3,4 @@ items:
   book{1..1000}:
     title: '{{internet.userName}}'
     dateOfPublished: '{{date.past}}'
-    author: '{{name.firstName}}'
     category: '{{music.genre}}'

@@ -10,16 +10,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { Hash } from '../../utils/Hash';
-import {
-  IPaginationOptions,
-  paginate,
-  Pagination,
-} from 'nestjs-typeorm-paginate';
 import { UUIDType } from '../common/validator/FindOneUUID.validator';
 import { ResetPayload } from '../auth/payloads/reset.payload';
 import { UpdatePayload } from './payloads/update.payload';
 import { RegisterPayload } from '../auth/payloads/register.payload';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { BookEntity } from '../books/entity/book.entity';
+import { BookPayload } from './payload/book.payload';
 // import { WebSocketServer } from '@nestjs/websockets';
 // import { Server } from 'socket.io';
 
@@ -28,6 +25,8 @@ export class UsersService extends TypeOrmCrudService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(BookEntity)
+    private readonly bookRepository: Repository<BookEntity>,
   ) {
     super(userRepository);
   }
@@ -95,6 +94,23 @@ export class UsersService extends TypeOrmCrudService<UserEntity> {
         `Failed to delete a profile by the name of ${user.username}.`,
       );
     }
+  }
+
+  async getBooksByUserID(id: string) {
+    const books = await this.userRepository.findOne({ id: id });
+    return books;
+  }
+
+  async createBookForUser(payload: BookPayload & { user: string }) {
+    const newBook = await this.bookRepository.save(
+      this.bookRepository.create(payload),
+    );
+    const user = await this.userRepository.findOne(payload.user);
+    if (user) {
+      user.books.push(newBook.id);
+      await this.userRepository.save(user);
+    }
+    return newBook;
   }
 
   // sendUserToClient(user: UserEntity) {

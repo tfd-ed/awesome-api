@@ -28,7 +28,7 @@ import { Express } from 'express';
 @ApiTags('Books')
 @Public()
 export class BookController implements CrudController<BookEntity> {
-  constructor(public service: BookService) { }
+  constructor(public service: BookService) {}
 
   get base(): CrudController<BookEntity> {
     return this;
@@ -55,14 +55,15 @@ export class BookController implements CrudController<BookEntity> {
     },
   })
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: {
-        destination: './upload',
-      },
-    }),
-  )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    const image = {
+      name: file.originalname,
+      path: '',
+      mimeType: file.mimetype,
+      size: 0,
+      buffer: file.buffer,
+    };
+    return await this.service.uploadImage(image);
   }
 }

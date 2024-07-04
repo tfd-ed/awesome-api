@@ -1,0 +1,8 @@
+entity: PurchaseEntity
+items:
+  purchase{1..100}:
+    price: '{{commerce.price}}'
+    books: 
+      - '@book*'
+      - '@book*'
+      - '@book*'

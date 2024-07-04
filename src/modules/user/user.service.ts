@@ -48,6 +48,7 @@ export class UsersService extends TypeOrmCrudService<UserEntity> {
     const updated = Object.assign(admin, updatePayload);
     delete updated.password;
     try {
+      console.log('Hello World 2');
       return await this.userRepository.save(updated);
     } catch (e) {
       throw new NotAcceptableException('Username or Email already exists!');

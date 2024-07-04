@@ -26,6 +26,11 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { PurchaseMoule } from 'src/modules/purchase/purchase.module';
 import { join } from 'path';
+import { MailmanModule, MailmanOptions } from '@squareboat/nest-mailman';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const appRoot = require('app-root-path');
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -49,7 +54,6 @@ import { join } from 'path';
             migrations: [__dirname + './../migrations/{*.ts,.js}'],
             synchronize: configService.get<string>('DB_SYNC') !== 'false',
             logNotifications: true,
-            migrationsRun: true,
             retryAttempts: 20,
           };
           return config as TypeOrmModuleAsyncOptions;
@@ -103,6 +107,20 @@ import { join } from 'path';
     }),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
+    MailmanModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
+        return {
+          host: config.get('EMAIL_HOST'),
+          port: +config.get('EMAIL_PORT'),
+          username: config.get('EMAIL_USER'),
+          password: config.get('EMAIL_PASSWORD'),
+          from: config.get('MAIL_SENDER_ID'),
+          path: appRoot + '/src/templates',
+        } as MailmanOptions;
+      },
+    }),
     AuthModule,
     UserModule,
     BookModule,

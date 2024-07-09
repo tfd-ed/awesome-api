@@ -29,14 +29,19 @@ import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      ignoreEnvFile: process.env.NODE_ENV === 'production',
+      envFilePath:
+        process.env.NODE_ENV === 'local.prod' ? '.env.local.prod' : '.env',
     }),
+    // ConfigModule.forRoot({
+    //   ignoreEnvFile: process.env.NODE_ENV === 'production',
+    // }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        console.log(process.env.NODE_ENV);
         // console.log(configService.get<boolean>('DB_SYNC'));
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'dev') {
           const config = {
             type: configService.get<string>('DB_TYPE'),
             host: configService.get<string>('DB_HOST'),
@@ -49,12 +54,28 @@ import { join } from 'path';
             migrations: [__dirname + './../migrations/{*.ts,.js}'],
             synchronize: configService.get<string>('DB_SYNC') !== 'false',
             logNotifications: true,
-            migrationsRun: true,
+            migrationsRun: false,
             retryAttempts: 20,
           };
           return config as TypeOrmModuleAsyncOptions;
         }
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === 'local.prod') {
+          const config = {
+            type: configService.get<string>('DB_TYPE'),
+            host: configService.get<string>('DB_HOST'),
+            port: configService.get<string>('DB_PORT'),
+            username: configService.get<string>('DB_USERNAME'),
+            password: configService.get<string>('DB_PASSWORD'),
+            database: configService.get<string>('DB_DATABASE'),
+            entities: [__dirname + './../**/**.entity{.ts,.js}'],
+            subscribers: [__dirname + './../**/**/*.subscriber.{ts}'],
+            migrations: [__dirname + './../migrations/{*.ts,.js}'],
+            synchronize: false,
+            migrationsRun: false,
+          };
+          return config as TypeOrmModuleAsyncOptions;
+        }
+        if (process.env.NODE_ENV === 'prod') {
           /**
            * Use database url in production instead
            */

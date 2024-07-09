@@ -1,0 +1,55 @@
+version: "2"
+services:
+  nest:
+    build: 
+      context: .
+      dockerfile: Dockerfile-prod
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .env:/app/.env
+      - ./upload:/app/upload
+    restart: unless-stopped
+    scale: 1
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '1024MB'
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    container_name: tfd-nest-nginx
+    depends_on:
+      - nest
+    environment:
+      - NGINX_SERVER_NAME=localhost
+      - NEST_HOST_1=awesome-api-nest-1
+      - NEST_PORT=3000
+      - NGINX_MAX_BODY=100M
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./certs/localhost.pem:/etc/nginx/ssl/localhost.pem
+      - ./certs/localhost-key.pem:/etc/nginx/ssl/localhost-key.pem
+  db:
+    image: postgres:14.10
+    container_name: tfd-nest-db
+    environment:
+      POSTGRES_DB: nest
+      POSTGRES_USER: nest
+      POSTGRES_PASSWORD: nest
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresdata:/var/lib/postgresql
+  redis:
+    image: redis:5
+    container_name: tfd-redis
+    ports:
+      - 6379:6379
+volumes:
+  postgresdata:

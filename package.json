@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ts-typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
     "fixture:generate": "fixtures ./src/fixtures --config ./ormconfig.js --require=ts-node/register --require=tsconfig-paths/register",
+    "fixture:generate-local-prod": "fixtures ./dist/fixtures --config ./ormconfig.local.prod.js",
     "migration:create": "yarn ts-typeorm migration:create -d src/migrations",
     "migration:generate": "yarn ts-typeorm migration:generate -d src/migrations",
     "migration:run": "yarn ts-typeorm migration:run",

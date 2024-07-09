@@ -17,9 +17,9 @@ export class BookEntity extends CommonEntity {
   @Column({ nullable: true })
   category: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   isbn: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', nullable: true })
   doi: string;
 }

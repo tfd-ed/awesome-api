@@ -10,8 +10,6 @@ http {
 
     upstream backend {
         server ${NEST_HOST_1}:${NEST_PORT};
-		server ${NEST_HOST_2}:${NEST_PORT};
-		server ${NEST_HOST_3}:${NEST_PORT};
     }
 
     server {

@@ -19,6 +19,7 @@ import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { GoogleOAuthGuard } from './google-oauth-guard';
 import { NoCache } from '../common/decorator/no-cache.decorator';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('api/v1/auth')
 @ApiTags('Authentication')
@@ -32,7 +33,8 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
-  ) { }
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   private logger = new Logger(AuthController.name);
 
@@ -105,13 +107,15 @@ export class AuthController {
    * Register user
    * @param payload register payload
    */
-  @ApiBearerAuth()
+  @Public()
   @Post('register')
   @ApiResponse({ status: 201, description: 'Successful Registration' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async register(@Body() payload: RegisterPayload): Promise<any> {
-    return await this.userService.create(payload);
+    const user = await this.userService.create(payload);
+    this.eventEmitter.emit('user.registered', payload);
+    return user;
   }
 
   /**

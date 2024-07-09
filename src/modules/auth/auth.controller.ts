@@ -22,7 +22,7 @@ import { NoCache } from '../common/decorator/no-cache.decorator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('api/v1/auth')
-@ApiTags('Authentication')
+@ApiTags('Auth')
 export class AuthController {
   /**
    * Constructor

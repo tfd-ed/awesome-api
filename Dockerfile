@@ -1,6 +1,6 @@
 FROM node:16.20.2
 WORKDIR /app
-ENV NODE_ENV development
+ENV NODE_ENV dev
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .

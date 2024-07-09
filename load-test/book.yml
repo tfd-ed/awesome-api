@@ -1,0 +1,28 @@
+books:
+  steps:
+    - name: Get all books
+      http:
+        url: https://${{env.host}}/api/v1/books
+        method: GET
+        check:
+          status: /^20/
+          performance:
+            firstByte:
+              - lte: 200
+            total:
+              - lte: 500
+    - name: Create book
+      http:
+        url: https://${{env.host}}/api/v1/books
+        method: POST
+        headers:
+            Content-Type: application/json
+            accept: application/json
+        json:
+            title: ${{ person.jobTitle | fake }}
+            dateOfPublished: ${{ date.anytime | fake }}
+            category: ${{ music.genre | fake }}
+            isbn: ${{ commerce.isbn | fake }}
+            doi: ${{ string.hexadecimal | fake }}
+        check:
+          status: /^20/

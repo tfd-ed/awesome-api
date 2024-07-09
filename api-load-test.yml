@@ -1,0 +1,703 @@
+version: "1.0"
+name: Scalable NestJS v8 Boilerplate
+config:
+  http:
+    baseURL: /api/v1
+tests:
+  Auth:
+    name: ""
+    steps:
+      - id: AuthController_login
+        http:
+          url: /api/v1/auth/login
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            username: user
+            password: admin
+          check:
+            status: 201
+      - id: AuthController_loginGoogle
+        http:
+          url: /api/v1/auth/login-google
+          method: GET
+          check:
+            status: 200
+      - id: AuthController_googleCallback
+        http:
+          url: /api/v1/auth/google/callback
+          method: GET
+          check:
+            status: 200
+      - id: AuthController_resetPassword
+        http:
+          url: /api/v1/auth/changePassword
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            username: eiusmod irure
+            currentPassword: amet
+            newPassword: nisi in do consequat
+            confirmPassword: magna velit mollit occaecat ad
+          check:
+            status: 201
+      - id: AuthController_register
+        http:
+          url: /api/v1/auth/register
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            username: ut id et sint
+            email: incididunt nulla sed
+            name: velit ipsum
+            password: veniam consectetur sed commodo reprehenderit
+            passwordConfirmation: adipisicing dolore nulla ut sed
+          check:
+            status: 201
+      - id: AuthController_getLoggedInUser
+        http:
+          url: /api/v1/auth/me
+          method: GET
+          check:
+            status: 200
+  Users:
+    name: ""
+    steps:
+      - id: deleteOneBaseUserControllerUserEntity
+        name: Delete a single UserEntity
+        http:
+          url: /api/v1/users/ut
+          method: DELETE
+          check:
+            status: 200
+      - id: getOneBaseUserControllerUserEntity
+        name: Retrieve a single UserEntity
+        http:
+          url: /api/v1/users/amet
+          method: GET
+          params:
+            fields:
+              - esse occaecat ut nisi veniam
+              - velit amet
+              - ut
+            join:
+              - enim nostrud exercitation adipisicing
+              - labore enim anim esse nisi
+              - irure ullamco nostrud
+            cache: 0
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      - id: updateOneBaseUserControllerUserEntity
+        name: Update a single UserEntity
+        http:
+          url: /api/v1/users/magna eu nostrud
+          method: PATCH
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            adipisicingb: 90890071.56816477
+            ute: fugiat est ut
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      - id: replaceOneBaseUserControllerUserEntity
+        name: Replace a single UserEntity
+        http:
+          url: /api/v1/users/dolor Ut laboris quis enim
+          method: PUT
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            officia_4b: 8926214
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      - id: createOneBaseUserControllerUserEntity
+        name: Create a single UserEntity
+        http:
+          url: /api/v1/users
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            proident_15_: -60711806.27198727
+          check:
+            status: 201
+            schema:
+              $ref: "#/components/schemas/UserEntity"
+      - id: getManyBaseUserControllerUserEntity
+        name: Retrieve multiple UserEntities
+        http:
+          url: /api/v1/users
+          method: GET
+          params:
+            fields:
+              - proident ut sunt commodo culpa
+              - consectetur do officia pariatur incididunt
+            s: adipisicing aute in sunt non
+            filter:
+              - et velit
+              - ullamco ut
+              - Lorem nostrud nisi
+              - eu ipsum et labore ut
+              - nulla
+            or:
+              - in dolore voluptate
+            sort:
+              - elit
+              - qui sed magna
+            join:
+              - Lorem
+              - officia
+              - ut incididunt nostrud
+              - ea Duis
+            limit: 64251619
+            offset: -72528069
+            page: 21980963
+            cache: 0
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/GetManyUserEntityResponseDto"
+      - id: UserController_getBookByUserID
+        http:
+          url: /api/v1/users/et mollit/books
+          method: GET
+          check:
+            status: 200
+      - id: UserController_createBookForUser
+        http:
+          url: /api/v1/users/aute amet esse/books
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            title: ullamco
+            dateOfPublished: quis
+            category: officia Lorem dolore
+          check:
+            status: 201
+      - id: createManyBaseUserControllerUserEntity
+        name: Create multiple UserEntities
+        http:
+          url: /api/v1/users/bulk
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            bulk:
+              - username: proident
+                email: dolore ex
+                name: sed aliqua tempor enim
+                password: veniam in laboris aliqua
+          check:
+            status: 201
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/UserEntity"
+  Books:
+    name: ""
+    steps:
+      - id: getManyBaseBookControllerBookEntity
+        name: Retrieve multiple BookEntities
+        http:
+          url: /api/v1/books
+          method: GET
+          params:
+            fields:
+              - in ut sunt dolor esse
+            s: ad voluptate qui pariatur aute
+            filter:
+              - ex officia consequat veniam nostrud
+              - sed ad
+              - anim
+              - culpa
+            or:
+              - aliquip voluptate ex in mollit
+              - sed consequat do
+            sort:
+              - dolor consectetur velit ex exercitation
+              - mollit proident dolor in ut
+              - laboris cillum consectetur
+            join:
+              - officia cillum magna ad dolor
+              - ut officia ipsum consequat
+              - adipisicing veniam est
+              - in aute
+            limit: 48492823
+            offset: -43153686
+            page: 56076245
+            cache: 0
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/GetManyBookEntityResponseDto"
+      - id: createOneBaseBookControllerBookEntity
+        name: Create a single BookEntity
+        http:
+          url: /api/v1/books
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            anim_b40: -11010126.806361914
+            aute_9ff: false
+            sint_: 77665084.99546543
+            enim_88: 50201540
+          check:
+            status: 201
+            schema:
+              $ref: "#/components/schemas/BookEntity"
+      - id: BookController_uploadFile
+        http:
+          url: /api/v1/books/upload
+          method: POST
+          headers:
+            Content-Type: multipart/form-data
+          formData:
+            nulla_0d: -19950120.338942498
+            file: file.txt
+          check:
+            status: 201
+      - id: getOneBaseBookControllerBookEntity
+        name: Retrieve a single BookEntity
+        http:
+          url: /api/v1/books/in veniam quis sit
+          method: GET
+          params:
+            fields:
+              - ad
+              - ipsum veniam pariatur culpa reprehenderit
+              - adipisicing ipsum commodo
+              - in ex exercitation officia
+            join:
+              - sint
+              - enim in
+              - ipsum aliqua voluptate
+            cache: 1
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/BookEntity"
+      - id: updateOneBaseBookControllerBookEntity
+        name: Update a single BookEntity
+        http:
+          url: /api/v1/books/incididunt do proident ullamco
+          method: PATCH
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            deseruntb0d: 1269669
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/BookEntity"
+      - id: replaceOneBaseBookControllerBookEntity
+        name: Replace a single BookEntity
+        http:
+          url: /api/v1/books/cillum adipisicing laborum labore
+          method: PUT
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            aliqua_8: 66064155.274001926
+            sitef: amet non
+            anim_63: true
+            essec: -39887127.062850825
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/BookEntity"
+      - id: deleteOneBaseBookControllerBookEntity
+        name: Delete a single BookEntity
+        http:
+          url: /api/v1/books/nulla laborum dolor dolore
+          method: DELETE
+          check:
+            status: 200
+      - id: createManyBaseBookControllerBookEntity
+        name: Create multiple BookEntities
+        http:
+          url: /api/v1/books/bulk
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            bulk:
+              - eu_f: 79828846
+              - in_37: false
+              - sintaf: -77435290
+                Excepteur_f_4: 71235885.58228838
+              - laborum_e: false
+          check:
+            status: 201
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/BookEntity"
+  Purchases:
+    name: ""
+    steps:
+      - id: PurchaseController_getAll
+        http:
+          url: /api/v1/purchases/all-books
+          method: GET
+          check:
+            status: 200
+      - id: PurchaseController_newDiscounr
+        http:
+          url: /api/v1/purchases/laboris enim/discount
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            price: -88933082.10177931
+          check:
+            status: 201
+      - id: PurchaseController_getAllDiscounts
+        http:
+          url: /api/v1/purchases/discounts
+          method: POST
+          check:
+            status: 201
+      - id: getOneBasePurchaseControllerPurchaseEntity
+        name: Retrieve a single PurchaseEntity
+        http:
+          url: /api/v1/purchases/do et laborum
+          method: GET
+          params:
+            fields:
+              - dolor
+              - consequat sint adipisicing magna esse
+              - dolor quis eu dolore
+              - commodo
+              - id
+            join:
+              - laboris velit elit eu
+              - magna proident
+              - qui eu ad esse
+            cache: 0
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/PurchaseEntity"
+      - id: updateOneBasePurchaseControllerPurchaseEntity
+        name: Update a single PurchaseEntity
+        http:
+          url: /api/v1/purchases/ex tempor nisi ea
+          method: PATCH
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            Duis__c7: eu elit deserunt ad
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/PurchaseEntity"
+      - id: replaceOneBasePurchaseControllerPurchaseEntity
+        name: Replace a single PurchaseEntity
+        http:
+          url: /api/v1/purchases/officia aliquip
+          method: PUT
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            culpa_: false
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/PurchaseEntity"
+      - id: deleteOneBasePurchaseControllerPurchaseEntity
+        name: Delete a single PurchaseEntity
+        http:
+          url: /api/v1/purchases/qui quis commodo
+          method: DELETE
+          check:
+            status: 200
+      - id: getManyBasePurchaseControllerPurchaseEntity
+        name: Retrieve multiple PurchaseEntities
+        http:
+          url: /api/v1/purchases
+          method: GET
+          params:
+            fields:
+              - deserunt velit
+              - nostrud aliquip labore
+              - eu proident qui deserunt
+              - aliquip in Duis incididunt proident
+            s: quis ex
+            filter:
+              - dolor pariatur est Ut
+              - laboris irure
+              - exercitation fugiat aliqua ea aute
+            or:
+              - cillum commodo
+            sort:
+              - est
+              - Duis commodo minim cupidatat
+            join:
+              - sed ut
+            limit: -13480823
+            offset: 44064028
+            page: 38764534
+            cache: 0
+          check:
+            status: 200
+            schema:
+              $ref: "#/components/schemas/GetManyPurchaseEntityResponseDto"
+      - id: createOneBasePurchaseControllerPurchaseEntity
+        name: Create a single PurchaseEntity
+        http:
+          url: /api/v1/purchases
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            ex_e8: consequat proident aliquip deserunt
+            proident596: -87782385
+            in23f: false
+          check:
+            status: 201
+            schema:
+              $ref: "#/components/schemas/PurchaseEntity"
+      - id: createManyBasePurchaseControllerPurchaseEntity
+        name: Create multiple PurchaseEntities
+        http:
+          url: /api/v1/purchases/bulk
+          method: POST
+          headers:
+            Content-Type: application/json
+            accept: application/json
+          json:
+            bulk:
+              - pariaturf7: true
+              - aute_1: 43224425.11756492
+                quisbb: false
+              - nulla909: pariatur
+              - enim_0c: 32033194.630107522
+                voluptate_b: -91340304.00338857
+                exercitation0: false
+              - eiusmod_0ae: 45339490
+                culpa3: false
+          check:
+            status: 201
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PurchaseEntity"
+components:
+  schemas:
+    LoginPayload:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user
+        password:
+          type: string
+          example: admin
+      required:
+        - username
+        - password
+    ResetPayload:
+      type: object
+      properties:
+        username:
+          type: string
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+      required:
+        - username
+        - currentPassword
+        - newPassword
+        - confirmPassword
+    RegisterPayload:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        passwordConfirmation:
+          type: string
+      required:
+        - username
+        - email
+        - name
+        - password
+        - passwordConfirmation
+    GetManyUserEntityResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserEntity"
+        count:
+          type: number
+        total:
+          type: number
+        page:
+          type: number
+        pageCount:
+          type: number
+      required:
+        - data
+        - count
+        - total
+        - page
+        - pageCount
+    UserEntity:
+      type: object
+      properties: {}
+    BookPayload:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Cambodia
+        dateOfPublished:
+          type: string
+          example: 23-11-1993
+        category:
+          type: string
+          example: horror
+      required:
+        - title
+        - dateOfPublished
+        - category
+    UserPayload:
+      type: object
+      properties:
+        username:
+          type: string
+          example: dara2342
+        email:
+          type: string
+          example: dara2342@gmail.com
+        name:
+          type: string
+          example: Chau Dara
+        password:
+          type: string
+          example: "123456789"
+      required:
+        - username
+        - email
+        - name
+        - password
+    CreateManyUserEntityDto:
+      type: object
+      properties:
+        bulk:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserPayload"
+      required:
+        - bulk
+    GetManyBookEntityResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookEntity"
+        count:
+          type: number
+        total:
+          type: number
+        page:
+          type: number
+        pageCount:
+          type: number
+      required:
+        - data
+        - count
+        - total
+        - page
+        - pageCount
+    BookEntity:
+      type: object
+      properties: {}
+    CreateManyBookEntityDto:
+      type: object
+      properties:
+        bulk:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookEntity"
+      required:
+        - bulk
+    DiscountPayload:
+      type: object
+      properties:
+        price:
+          type: number
+          example: "235.53"
+      required:
+        - price
+    GetManyPurchaseEntityResponseDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/PurchaseEntity"
+        count:
+          type: number
+        total:
+          type: number
+        page:
+          type: number
+        pageCount:
+          type: number
+      required:
+        - data
+        - count
+        - total
+        - page
+        - pageCount
+    PurchaseEntity:
+      type: object
+      properties: {}
+    CreateManyPurchaseEntityDto:
+      type: object
+      properties:
+        bulk:
+          type: array
+          items:
+            $ref: "#/components/schemas/PurchaseEntity"
+      required:
+        - bulk

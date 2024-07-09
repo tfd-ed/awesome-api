@@ -40,7 +40,7 @@ import { BookPayload } from './payload/book.payload';
   },
 })
 @Controller('api/v1/users')
-@ApiTags('User')
+@ApiTags('Users')
 export class UserController implements CrudController<UserEntity> {
   constructor(
     public service: UsersService,

@@ -25,7 +25,7 @@ import { DiscountPayload } from './paylaod/discount.payload';
   },
 })
 @Controller('api/v1/purchases')
-@ApiTags('purchases')
+@ApiTags('Purchases')
 @Public()
 export class PurchaseController implements CrudController<PurchaseEntity> {
   constructor(public service: PurchaseService) {}

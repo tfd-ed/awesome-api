@@ -59,7 +59,6 @@ const appRoot = require('app-root-path');
             migrations: [__dirname + './../migrations/{*.ts,.js}'],
             synchronize: configService.get<string>('DB_SYNC') !== 'false',
             logNotifications: true,
-            retryAttempts: 20,
           };
           return config as TypeOrmModuleAsyncOptions;
         }

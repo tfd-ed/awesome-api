@@ -1,0 +1,11 @@
+version: "1.0"
+name: Test Books
+env:
+  host: localhost
+config:
+  loadTest:
+    phases:
+      - duration: 10
+        arrivalRate: 1
+tests:
+  $ref: './load-test/book.yml'

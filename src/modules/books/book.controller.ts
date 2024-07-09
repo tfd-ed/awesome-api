@@ -34,8 +34,8 @@ export class BookController implements CrudController<BookEntity> {
     return this;
   }
 
-  @CacheTTL(60)
-  @Throttle(30, 10 * 60)
+  // @CacheTTL(60)
+  // @Throttle(30, 10 * 60)
   @Public()
   @Override('getManyBase')
   getMany(@ParsedRequest() req: CrudRequest) {

@@ -99,6 +99,19 @@ const appRoot = require('app-root-path');
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
+        if (process.env.NODE_ENV === 'prod') {
+          return {
+            ttl: configService.get('CACHE_TTL'), // seconds
+            max: configService.get('CACHE_MAX'), // maximum number of items in cache
+            store: redisStore,
+            url: configService.get('REDIS_TLS_URL'),
+            tls: {
+              servername: configService.get('CACHE_HOST'),
+              rejectUnauthorized: false,
+            },
+            // isGlobal: true,
+          } as CacheModuleOptions;
+        }
         return {
           ttl: configService.get<number>('CACHE_TTL'), // seconds
           max: configService.get<number>('CACHE_MAX'), // maximum number of items in cache

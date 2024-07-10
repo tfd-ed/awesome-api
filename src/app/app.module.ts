@@ -104,7 +104,7 @@ const appRoot = require('app-root-path');
             ttl: configService.get('CACHE_TTL'), // seconds
             max: configService.get('CACHE_MAX'), // maximum number of items in cache
             store: redisStore,
-            url: configService.get('REDIS_TLS_URL'),
+            url: configService.get('REDIS_URL'),
             tls: {
               servername: configService.get('CACHE_HOST'),
               rejectUnauthorized: false,

@@ -1,9 +1,4 @@
-import {
-  CacheInterceptor,
-  CacheModule,
-  CacheModuleOptions,
-  Module,
-} from '@nestjs/common';
+import { CacheModule, CacheModuleOptions, Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

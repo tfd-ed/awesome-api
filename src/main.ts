@@ -24,6 +24,7 @@ CrudConfigService.load({
 // Eslint
 import { AppModule } from './app/app.module';
 import { RedisIoAdapter } from './modules/common/adapter/ws.adapter';
+import { ConfigService } from '@nestjs/config';
 // import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -37,7 +38,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
   const redisIoAdapter = new RedisIoAdapter(app);
-  await redisIoAdapter.connectToRedis();
+  const config: ConfigService = app.get(ConfigService);
+  await redisIoAdapter.connectToRedis(config.get('REDIS_URL'));
   setupSwagger(app);
   // Enable Cors for development
   app.enableCors();

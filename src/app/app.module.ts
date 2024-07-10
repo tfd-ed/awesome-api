@@ -124,14 +124,32 @@ const appRoot = require('app-root-path');
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        ttl: config.get<number>('RATE_LIMIT_TTL'),
-        limit: config.get<number>('RATE_LIMIT_ITEMS'),
-        storage: new ThrottlerStorageRedisService({
-          host: config.get<string>('CACHE_HOST'),
-          port: config.get<number>('CACHE_PORT'),
-        }),
-      }),
+      useFactory: (config: ConfigService) => {
+        if (process.env.NODE_ENV === 'prod') {
+          return {
+            ttl: config.get<number>('RATE_LIMIT_TTL'),
+            limit: config.get<number>('RATE_LIMIT_ITEMS'),
+            storage: new ThrottlerStorageRedisService({
+              host: config.get<string>('CACHE_HOST'),
+              port: config.get<number>('CACHE_PORT'),
+              password: config.get<number>('CACHE_PASSWORD'),
+              // url: configService.get('REDIS_URL'),
+              tls: {
+                servername: config.get<string>('CACHE_HOST'),
+                rejectUnauthorized: false,
+              },
+            }),
+          };
+        }
+        return {
+          ttl: config.get<number>('RATE_LIMIT_TTL'),
+          limit: config.get<number>('RATE_LIMIT_ITEMS'),
+          storage: new ThrottlerStorageRedisService({
+            host: config.get<string>('CACHE_HOST'),
+            port: config.get<number>('CACHE_PORT'),
+          }),
+        };
+      },
     }),
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),

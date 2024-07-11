@@ -10,7 +10,7 @@ export class RedisIoAdapter extends IoAdapter {
     console.log(redis_url);
     const pubClient = createClient({
       url: redis_url,
-      password: password,
+      // password: password,
       socket: {
         tls: true,
         rejectUnauthorized: false,

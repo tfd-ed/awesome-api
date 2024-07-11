@@ -39,7 +39,11 @@ async function bootstrap() {
   app.use(helmet());
   const redisIoAdapter = new RedisIoAdapter(app);
   const config: ConfigService = app.get(ConfigService);
-  await redisIoAdapter.connectToRedis(config.get('REDIS_URL'));
+  const redisURL =
+    config.get('NODE_ENV') == 'dev' || config.get('NODE_ENV') == 'local.prod'
+      ? `redis://${config.get('CACHE_HOST')}:${config.get('CACHE_PORT')}`
+      : config.get('REDIS_URL');
+  await redisIoAdapter.connectToRedis(redisURL);
   setupSwagger(app);
   // Enable Cors for development
   app.enableCors();

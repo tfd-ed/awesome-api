@@ -49,7 +49,7 @@ const appRoot = require('app-root-path');
             username: configService.get<string>('DB_USERNAME'),
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_DATABASE'),
-            entities: [__dirname + './../**/**.entity{.ts,.js}'],
+            entities: [__dirname + './../**.entity{.ts,.js}'],
             subscribers: [__dirname + './../**/**/*.subscriber.{ts}'],
             migrations: [__dirname + './../migrations/{*.ts,.js}'],
             synchronize: configService.get<string>('DB_SYNC') !== 'false',
@@ -69,7 +69,7 @@ const appRoot = require('app-root-path');
             subscribers: [__dirname + './../**/**/*.subscriber.{ts}'],
             migrations: [__dirname + './../migrations/{*.ts,.js}'],
             synchronize: false,
-            migrationsRun: false,
+            migrationsRun: true,
           };
           return config as TypeOrmModuleAsyncOptions;
         }
@@ -80,9 +80,9 @@ const appRoot = require('app-root-path');
           return {
             type: configService.get<string>('DB_TYPE'),
             url: configService.get<string>('DATABASE_URL'),
-            entities: [__dirname + './../**/**.entity{.js}'],
+            entities: [__dirname + './../**/**.entity{.ts,.js}'],
             subscribers: [__dirname + './../**/**/*.subscriber.{js}'],
-            migration: [join(__dirname, './../migrations/{*.js}')],
+            migration: [join(__dirname, './../migrations/{*.ts,.js}')],
             synchronize: false,
             ssl: true,
             migrationsRun: true,

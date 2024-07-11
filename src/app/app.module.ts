@@ -85,6 +85,7 @@ const appRoot = require('app-root-path');
             migration: [join(__dirname, './../migrations/{*.js}')],
             synchronize: false,
             ssl: true,
+            migrationsRun: true,
             retryAttempts: 20,
             extra: {
               ssl: {
